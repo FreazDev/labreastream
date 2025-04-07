@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tacos Gagner</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .season-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .season-btn {
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .season-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .season-btn.active {
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+        }
+
+        .episode-selector {
+            display: none;
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .episode-selector.active {
+            display: block;
+        }
+
+        select {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background-color: white;
+            width: 200px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        select:hover {
+            border-color: #a5a5a5;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            color: #aaa;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* HTML5 Video Player Style */
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .season-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .modal-content {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TAcosssssss</h1>
+        
+        <div class="season-buttons">
+            <button class="season-btn" onclick="showEpisodes(1)">Saison 1</button>
+            <button class="season-btn" onclick="showEpisodes(2)">Saison 2</button>
+        </div>
+        
+        <div id="season1-episodes" class="episode-selector">
+            <select id="season1-select" onchange="playEpisode(1, this.value)">
+                <option value="" disabled selected>Sélectionnez un épisode</option>
+                <option value="https://store5.gofile.io/download/direct/b2d0243b-4b65-4638-88ae-f8f0803170c5/ep1.mp4?cb_r0o0t1040xi=1744054587003">Épisode 1</option>
+                <option value="https://example.com/video2.mp4">Épisode 2</option>
+                <option value="https://example.com/video3.mp4">Épisode 3</option>
+                <option value="https://example.com/video4.mp4">Épisode 4</option>
+                <option value="https://example.com/video5.mp4">Épisode 5</option>
+                <option value="https://example.com/video6.mp4">Épisode 6</option>
+                <option value="https://example.com/video7.mp4">Épisode 7</option>
+            </select>
+        </div>
+        
+        <div id="season2-episodes" class="episode-selector">
+            <select id="season2-select" onchange="playEpisode(2, this.value)">
+                <option value="" disabled selected>Sélectionnez un épisode</option>
+                <option value="https://example.com/video8.mp4">Épisode 1</option>
+                <option value="https://example.com/video9.mp4">Épisode 2</option>
+                <option value="https://example.com/video10.mp4">Épisode 3</option>
+                <option value="https://example.com/video11.mp4">Épisode 4</option>
+                <option value="https://example.com/video12.mp4">Épisode 5</option>
+                <option value="https://example.com/video13.mp4">Épisode 6</option>
+                <option value="https://example.com/video14.mp4">Épisode 7</option>
+            </select>
+        </div>
+    </div>
+    
+    <!-- Video Modal -->
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title">Épisode</h2>
+            <div class="video-container">
+                <!-- Changement ici : utilisation de <video> au lieu de <iframe> -->
+                <video id="videoPlayer" controls autoplay>
+                    Votre navigateur ne supporte pas la lecture de vidéos HTML5.
+                </video>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showEpisodes(seasonNum) {
+            // Hide all episode selectors
+            document.querySelectorAll('.episode-selector').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Show the selected season's episodes
+            document.getElementById(`season${seasonNum}-episodes`).classList.add('active');
+            
+            // Update active button styling
+            document.querySelectorAll('.season-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        function playEpisode(seasonNum, videoUrl) {
+            if (!videoUrl) return;
+            
+            // Update modal title
+            const selectElement = document.getElementById(`season${seasonNum}-select`);
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            document.getElementById('modal-title').textContent = `Saison ${seasonNum} - ${selectedOption.text}`;
+            
+            // Set video source using HTML5 video element
+            const videoPlayer = document.getElementById('videoPlayer');
+            videoPlayer.src = videoUrl;
+            videoPlayer.load(); // Charge la vidéo
+            videoPlayer.play().catch(e => console.error("La lecture automatique a échoué:", e));
+            
+            // Show modal
+            document.getElementById('videoModal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            // Pause video and hide modal
+            const videoPlayer = document.getElementById('videoPlayer');
+            videoPlayer.pause();
+            videoPlayer.src = '';
+            document.getElementById('videoModal').style.display = 'none';
+        }
+        
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('videoModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
